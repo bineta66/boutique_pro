@@ -232,7 +232,7 @@ def menu():
         print("5.listes produits")
         print("6.historique")
         print("7.Produits en repture")
-        print("7. Quitter")
+        print("8. Quitter")
 
         choix = input("Choix : ")
         if choix == "1":
