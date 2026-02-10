@@ -179,6 +179,31 @@ def ajouter_mouvement():
     except Exception as e:
         print("Erreur :", e)
 
+def afficher_historique():
+    try:
+        # On récupère les mouvements avec le nom du produit
+        cursor.execute("""
+            SELECT h.id, p.designation, h.type_mouvement, h.quantite,
+                   h.stock_actuel, h.en_rupture, h.date_mouvement
+            FROM historique h
+            JOIN produits p ON h.idproduit = p.id
+            ORDER BY h.date_mouvement DESC
+        """)
+        mouvements = cursor.fetchall()
+
+        if not mouvements:
+            print("Aucun mouvement enregistré.")
+            return
+
+        print("\n--- Historique des mouvements ---")
+        for m in mouvements:
+            id_, nom_produit, type_mouvement, quantite, stock, en_rupture, date_mvt = m
+            statut = "En rupture" if en_rupture else "En stock"
+            print(f"[{date_mvt}] Produit: {nom_produit} | Type: {type_mouvement} | "
+                  f"Quantité: {quantite} - Stock actuel: {stock} - Statut: {statut}")
+    except Exception as e:
+        print("Erreur lors de l'affichage de l'historique :", e)
+
 
 
 def menu():
@@ -189,7 +214,8 @@ def menu():
         print("3. Ajouter produit")
         print("4. Ajouter mouvement")
         print("5.listes produits")
-        print("6. Quitter")
+        print("6.historique")
+        print("7. Quitter")
 
         choix = input("Choix : ")
         if choix == "1":
@@ -201,8 +227,10 @@ def menu():
         elif choix == "4":
             ajouter_mouvement()
         elif choix=="5":
-             lister_produits()    
-        elif choix == "6":
+             lister_produits()  
+        elif choix=="6":
+            afficher_historique()     
+        elif choix == "7":
             print("Au revoir !")
             break
         else:
