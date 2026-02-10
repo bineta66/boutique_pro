@@ -204,6 +204,21 @@ def afficher_historique():
     except Exception as e:
         print("Erreur lors de l'affichage de l'historique :", e)
 
+def afficher_alertes():
+    cursor.execute("""
+        SELECT designation, stock
+        FROM produits
+        WHERE stock < 5
+    """)
+    alertes = cursor.fetchall()
+    
+    if not alertes:
+        print("Aucun produit en rupture.")
+        return
+    
+    print("\n--- Produits en alerte (stock < 5) ---")
+    for produit, stock in alertes:
+        print(f"{produit} - Stock actuel : {stock} - Statut : En rupture")
 
 
 def menu():
@@ -215,6 +230,7 @@ def menu():
         print("4. Ajouter mouvement")
         print("5.listes produits")
         print("6.historique")
+        print("7.Produits en repture")
         print("7. Quitter")
 
         choix = input("Choix : ")
@@ -229,8 +245,10 @@ def menu():
         elif choix=="5":
              lister_produits()  
         elif choix=="6":
-            afficher_historique()     
-        elif choix == "7":
+            afficher_historique() 
+        elif choix=="7":
+            afficher_alertes()        
+        elif choix == "8":
             print("Au revoir !")
             break
         else:
