@@ -221,7 +221,6 @@ def afficher_alertes():
     for produit, stock in alertes:
         print(f"{produit} - Stock actuel : {stock} - Statut : En rupture")
 
-
 def menu():
     while True:
         print("\n====== Menu principal ======")
@@ -229,12 +228,13 @@ def menu():
         print("2. Lister catégories")
         print("3. Ajouter produit")
         print("4. Ajouter mouvement")
-        print("5.listes produits")
-        print("6.historique")
-        print("7.Produits en repture")
+        print("5. Liste produits")
+        print("6. Historique")
+        print("7. Produits en rupture")
         print("8. Quitter")
 
         choix = input("Choix : ")
+
         if choix == "1":
             ajouter_categorie()
         elif choix == "2":
@@ -243,17 +243,18 @@ def menu():
             ajouter_produit()
         elif choix == "4":
             ajouter_mouvement()
-        elif choix=="5":
-             lister_produits()  
-        elif choix=="6":
-            afficher_historique() 
-        elif choix=="7":
-            afficher_alertes()        
+        elif choix == "5":
+            lister_produits()
+        elif choix == "6":
+            afficher_historique()
+        elif choix == "7":
+            afficher_alertes()
         elif choix == "8":
             print("Au revoir !")
             break
         else:
-            print("Choix invalide.")
+            print("Choix invalide. Veuillez sélectionner un numéro entre 1 et 8.")
+
 
 
 
