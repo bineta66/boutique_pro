@@ -16,16 +16,26 @@ def saisie_nom_categorie(prompt):
         else:
             print("Erreur : doit contenir uniquement des lettres.")
 # controler le saisie sur le prix et stock pour que il ne soient pas negatifs ou null
-def saisir_prix_stock():
+def saisir_prix():
     while True:
         try:
-            valeur = int(input("Donner le prix ou stock (>=0) : "))
+            valeur = int(input("Donner le prix (>=0) : "))
             if valeur >= 0:
                 return valeur
             else:
-                print("Le prix ou stock doit être positif.")
+                print("Le prix  doit être positif.")
         except ValueError:
             print("Veuillez entrer un entier valide.")
+def saisir_stock():
+    while True:
+        try:
+            valeur = int(input("Donner le stock (>=0) : "))
+            if valeur >= 0:
+                return valeur
+            else:
+                print("Le  stock doit être positif.")
+        except ValueError:
+            print("Veuillez entrer un entier valide.")            
 # controler le saise sur les id
 def saisir_id(prompt="ID : "):
     while True:
@@ -60,11 +70,11 @@ def afficher_categorie():
 
 
 def ajouter_produit():
+    afficher_categorie()
     designation = input("Donner le nom du produit : ")
-    prix = saisir_prix_stock()
+    prix = saisir_prix()
     idcategorie = saisir_id("ID de la catégorie : ")
-    stock_initial = saisir_prix_stock()
-
+    stock_initial = saisir_stock()
   
     if stock_initial < 5:
         en_rupture = True
@@ -108,16 +118,15 @@ def lister_produits():
     if produit:
         print("\n--- Produits ---")
         for id_, nom, prix, cat, stock, en_r in produit:
-            if en_rupture:
-                     print(f"Stock actuel : {stock_actuel} | Statut : En rupture")
-            else:
-                    print(f"Stock actuel : {stock_actuel} | Statut : En stock")
-            print(f"ID:{id_} - {nom} - Prix:{prix} - Catégorie:{cat} - Stock:{stock} - {statut}")
+                statut = "En rupture" if en_r else "En stock"
+                print(f"ID:{id_} - {nom} - Prix:{prix} - Catégorie:{cat} - Stock:{stock} - {statut}")
+
     else:
         print("Aucun produit trouvé.")
 
 
 def ajouter_mouvement():
+    lister_produits()
     id_produit = int(input("ID du produit : "))
 
     cursor.execute("SELECT designation, stock, en_rupture FROM produits WHERE id=%s", (id_produit,))
