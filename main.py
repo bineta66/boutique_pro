@@ -108,9 +108,9 @@ def lister_produits():
     if produit:
         print("\n--- Produits ---")
         for id_, nom, prix, cat, stock, en_r in produit:
-              if en_rupture:
+            if en_rupture:
                      print(f"Stock actuel : {stock_actuel} | Statut : En rupture")
-             else:
+            else:
                     print(f"Stock actuel : {stock_actuel} | Statut : En stock")
             print(f"ID:{id_} - {nom} - Prix:{prix} - Catégorie:{cat} - Stock:{stock} - {statut}")
     else:
@@ -118,45 +118,45 @@ def lister_produits():
 
 
 def ajouter_mouvement():
+    id_produit = int(input("ID du produit : "))
+
+    cursor.execute("SELECT designation, stock, en_rupture FROM produits WHERE id=%s", (id_produit,))
+    produit = cursor.fetchone()
+    if not produit:
+        print("Produit introuvable !")
+        return
+
+    nom_produit, stock_actuel, en_rupture = produit
+    type_mouvement = input("Type (ENTREE/SORTIE) : ").upper()
+    if type_mouvement not in ("ENTREE", "SORTIE"):
+        print("Type incorrect !")
+        return
+
+    quantite = int(input("Quantité : "))
+    if quantite <= 0:
+        print("La quantité doit être positive !")
+        return
+
+    # Calcul du nouveau stock
+    if type_mouvement == "ENTREE":
+        stock_actuel += quantite
+    else:
+        stock_actuel -= quantite
+        if stock_actuel < 0:
+            print("Impossible : stock insuffisant !")
+            return
+
+    # Déterminer le statut
+    en_rupture = stock_actuel < 5
+
     try:
-        id_produit = int(input("ID du produit : "))
-
-        cursor.execute("SELECT designation, stock, en_rupture FROM produits WHERE id=%s", (id_produit,))
-        produit = cursor.fetchone()
-        if not produit:
-            print("Produit introuvable !")
-            return
-
-        nom_produit, stock_actuel, en_rupture = produit
-        type_mouvement = input("Type (ENTREE/SORTIE) : ").upper()
-        if type_mouvement not in ("ENTREE", "SORTIE"):
-            print("Type incorrect !")
-            return
-            #  controleur la saisie sur la quantité
-        quantite = int(input("Quantité : "))
-        if quantite <= 0:
-            print("La quantité doit être positive !")
-            return
-
-        #  les etats des quantites actuel si s est entree u sortie  
-        if type_mouvement == "ENTREE":
-            stock_actuel += quantite
-        else:
-            stock_actuel -= quantite
-            if stock_actuel < 0:
-                print("Impossible : stock insuffisant !")
-                return
-
-        # Déterminer le statut
-        en_rupture = stock_actuel < 5
-
         # Ajouter le mouvement
         cursor.execute("""
             INSERT INTO mouvements (idproduit, type_mouvement, quantite, date_mouvement)
             VALUES (%s, %s, %s, %s)
         """, (id_produit, type_mouvement, quantite, datetime.now()))
 
-        # Mise à jour le stock et le statut
+        # Mettre à jour le stock et le statut
         cursor.execute("""
             UPDATE produits
             SET stock=%s, en_rupture=%s
@@ -165,7 +165,7 @@ def ajouter_mouvement():
 
         conn.commit()
 
-        # Affichage
+        # Affichage simple
         if type_mouvement == "ENTREE":
             print(f"Mouvement ajouté : {quantite} ajoutées pour '{nom_produit}'")
         else:
@@ -178,6 +178,7 @@ def ajouter_mouvement():
 
     except Exception as e:
         print("Erreur :", e)
+
 
 def afficher_historique():
     try:
