@@ -26,7 +26,7 @@ CREATE TABLE `categories` (
   `id` int NOT NULL AUTO_INCREMENT,
   `nom_categorie` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `categories` (
 
 LOCK TABLES `categories` WRITE;
 /*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Informatique'),(2,'Informatique');
+INSERT INTO `categories` VALUES (1,'Informatique'),(2,'Informatique'),(3,'Papier'),(4,'Electronique'),(5,'Machine');
 /*!40000 ALTER TABLE `categories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -55,7 +55,7 @@ CREATE TABLE `historique` (
   `en_rupture` tinyint(1) DEFAULT NULL,
   `date_mouvement` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -64,7 +64,7 @@ CREATE TABLE `historique` (
 
 LOCK TABLES `historique` WRITE;
 /*!40000 ALTER TABLE `historique` DISABLE KEYS */;
-INSERT INTO `historique` VALUES (1,1,'ENTREE',27,54,0,'2026-02-09 22:26:26');
+INSERT INTO `historique` VALUES (1,1,'ENTREE',27,54,0,'2026-02-09 22:26:26'),(2,2,'SORTIE',3000,0,1,'2026-02-10 15:07:05');
 /*!40000 ALTER TABLE `historique` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +84,7 @@ CREATE TABLE `mouvements` (
   PRIMARY KEY (`id`),
   KEY `idproduit` (`idproduit`),
   CONSTRAINT `mouvements_ibfk_1` FOREIGN KEY (`idproduit`) REFERENCES `produits` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +93,7 @@ CREATE TABLE `mouvements` (
 
 LOCK TABLES `mouvements` WRITE;
 /*!40000 ALTER TABLE `mouvements` DISABLE KEYS */;
-INSERT INTO `mouvements` VALUES (1,1,'ENTREE',27,'2026-02-09 22:26:26');
+INSERT INTO `mouvements` VALUES (1,1,'ENTREE',27,'2026-02-09 22:26:26'),(2,2,'SORTIE',3000,'2026-02-10 15:07:05');
 /*!40000 ALTER TABLE `mouvements` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!50003 SET @saved_cs_client      = @@character_set_client */ ;
@@ -152,7 +152,7 @@ CREATE TABLE `produits` (
   PRIMARY KEY (`id`),
   KEY `idcategorie` (`idcategorie`),
   CONSTRAINT `produits_ibfk_1` FOREIGN KEY (`idcategorie`) REFERENCES `categories` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -161,8 +161,35 @@ CREATE TABLE `produits` (
 
 LOCK TABLES `produits` WRITE;
 /*!40000 ALTER TABLE `produits` DISABLE KEYS */;
-INSERT INTO `produits` VALUES (1,'ordinateur',2300000.00,54,1,0);
+INSERT INTO `produits` VALUES (1,'ordinateur',2300000.00,54,1,0),(2,'cahier',200.00,0,2,1),(3,'livre',1000.00,230,2,0);
 /*!40000 ALTER TABLE `produits` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `utilisateurs`
+--
+
+DROP TABLE IF EXISTS `utilisateurs`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `utilisateurs` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(50) DEFAULT NULL,
+  `password` varchar(100) DEFAULT NULL,
+  `role` enum('admin','user') DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `utilisateurs`
+--
+
+LOCK TABLES `utilisateurs` WRITE;
+/*!40000 ALTER TABLE `utilisateurs` DISABLE KEYS */;
+INSERT INTO `utilisateurs` VALUES (1,'Bineta','bf29940e408291761b59c7349e06c4d56973ed2dfc2aa44c30750a4e54571f7d','admin'),(2,'Atou','bf29940e408291761b59c7349e06c4d56973ed2dfc2aa44c30750a4e54571f7d','user');
+/*!40000 ALTER TABLE `utilisateurs` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -174,4 +201,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-02-10 11:14:05
+-- Dump completed on 2026-02-11 11:40:16
