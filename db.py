@@ -12,5 +12,5 @@ def get_connection():
         cursor = conn.cursor()
         return conn, cursor
     except Error as err:
-        print(f"Erreur de connexion : {err}")
+        print("Erreur de connexion :", err)
         return None, None
